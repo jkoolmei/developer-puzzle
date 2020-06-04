@@ -26,7 +26,7 @@ export class PriceQueryEffects {
           .get(
             `${this.env.apiURL}/beta/stock/${action.symbol}/chart/${
               action.period
-            }?token=${this.env.apiKey}`
+            }/${this.env.apiKey}`
           )
           .pipe(
             map(resp => {
