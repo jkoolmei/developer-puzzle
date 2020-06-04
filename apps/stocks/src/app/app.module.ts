@@ -4,7 +4,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 import { StocksAppConfigToken } from '@coding-challenge/stocks/data-access-app-config';
-import { StocksDataAccessPriceQueryModule } from '@coding-challenge/stocks/data-access-price-query';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
@@ -36,8 +35,7 @@ import { environment } from '../environments/environment';
         lock: true,
         persist: true
       }
-    }),
-    StocksDataAccessPriceQueryModule
+    })
   ],
   providers: [{ provide: StocksAppConfigToken, useValue: environment }],
   bootstrap: [AppComponent]

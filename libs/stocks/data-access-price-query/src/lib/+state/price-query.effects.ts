@@ -24,12 +24,21 @@ export class PriceQueryEffects {
       run: (action: FetchPriceQuery, state: PriceQueryPartialState) => {
         return this.httpClient
           .get(
-            `${this.env.apiURL}/beta/stock/${action.symbol}/chart/${
-              action.period
-            }?token=${this.env.apiKey}`
+            `${this.env.apiURL}/beta/stock/${action.symbol}/chart/${action.period}`
           )
           .pipe(
-            map(resp => new PriceQueryFetched(resp as PriceQueryResponse[]))
+            map(resp => {
+              const priceQuery = new PriceQueryFetched(resp as PriceQueryResponse[]);
+              priceQuery.queryResults = priceQuery.queryResults
+                .filter(result => {
+                  const resultDate = new Date(result.date);
+                  resultDate.setHours(0, 0, 0, 0);
+
+                  return (action.dateFrom == null || resultDate >= action.dateFrom)
+                    && (action.dateTo == null || resultDate <= action.dateTo);
+                });
+              return priceQuery;
+            })
           );
       },
 
