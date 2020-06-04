@@ -15,6 +15,8 @@ export class StocksComponent implements OnInit, OnDestroy {
   quotes$ = this.priceQuery.priceQueries$;
   error$ = this.priceQuery.error$;
   destroy$ = new Subject<void>();
+  maxDateFrom = new Date();
+  maxDateTo = new Date();
 
   timePeriods = [
     { viewValue: 'All available data', value: 'max' },
@@ -30,7 +32,9 @@ export class StocksComponent implements OnInit, OnDestroy {
   constructor(private fb: FormBuilder, private priceQuery: PriceQueryFacade) {
     this.stockPickerForm = fb.group({
       symbol: [null, Validators.required],
-      period: [null, Validators.required]
+      period: [null, Validators.required],
+      dateFrom: [null, Validators.required],
+      dateTo: [null, Validators.required]
     });
   }
 
@@ -48,9 +52,74 @@ export class StocksComponent implements OnInit, OnDestroy {
   }
 
   fetchQuote() {
+    this.setValidators();
     if (this.stockPickerForm.valid) {
-      const { symbol, period } = this.stockPickerForm.value;
-      this.priceQuery.fetchQuote(symbol, period);
+      const { symbol, period, dateFrom, dateTo } = this.stockPickerForm.value;
+      this.priceQuery.fetchQuote(symbol, this.getOptimalPeriod(), dateFrom, dateTo);
+    }
+  }
+
+  private validateAndChangeDates(isDateFromVal: boolean) {
+    const dateFromValue = this.stockPickerForm.controls['dateFrom'].value;
+    const dateToValue = this.stockPickerForm.controls['dateTo'].value;
+    if (dateToValue && (dateFromValue > dateToValue)) {
+      if(isDateFromVal) {
+        this.stockPickerForm.controls['dateTo'].setValue(dateFromValue);
+      } else {
+        this.stockPickerForm.controls['dateFrom'].setValue(dateToValue);
+      }
+    }
+  }
+
+  private getOptimalPeriod(): string {
+    const dateFromValue = this.stockPickerForm.controls['dateFrom'].value;
+    const periodValue = this.stockPickerForm.controls['period'].value;
+    if (periodValue == null && dateFromValue != null) {
+      const months = this.getMonthsDiff(new Date(dateFromValue), new Date());
+      if (months > 60) {
+        return 'max'
+      }
+      if (months > 24) {
+        return '5y';
+      }
+      if (months > 12) {
+        return '2y';
+      }
+      if (months > 6) {
+        return '1y';
+      }
+      if (months > 3) {
+        return '6m';
+      }
+      if (months > 1) {
+        return '3m'
+      }
+      if (months <= 1) {
+        return '1m';
+      }
+    }
+    return periodValue;
+  }
+
+  private getMonthsDiff(d1, d2) {
+    const years = d2.getFullYear() - d1.getFullYear();
+    return (years * 12) + (d2.getMonth() - d1.getMonth() + 1);
+  }
+
+  private setValidators() {
+    const period = this.stockPickerForm.controls['period'];
+    const dateFrom = this.stockPickerForm.controls['dateFrom'];
+    const dateTo = this.stockPickerForm.controls['dateTo'];
+
+    if (period.value != null) {
+      dateFrom.setValidators(Validators.nullValidator);
+      dateTo.setValidators(Validators.nullValidator);
+      dateFrom.updateValueAndValidity({emitEvent : false});
+      dateTo.updateValueAndValidity({emitEvent : false});
+    }
+    if (dateFrom.value != null && dateTo.value != null) {
+      period.setValidators(Validators.nullValidator);
+      period.updateValueAndValidity({emitEvent : false});
     }
   }
 }

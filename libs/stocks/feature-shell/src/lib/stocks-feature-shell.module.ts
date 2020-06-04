@@ -4,7 +4,9 @@ import {
   MatFormFieldModule,
   MatInputModule,
   MatSelectModule,
-  MatButtonModule
+  MatButtonModule,
+  MatDatepickerModule,
+  MatNativeDateModule
 } from '@angular/material';
 import { RouterModule } from '@angular/router';
 import { SharedUiChartModule } from '@coding-challenge/shared/ui/chart';
@@ -24,7 +26,9 @@ import { StocksDataAccessPriceQueryModule } from '@coding-challenge/stocks/data-
     MatSelectModule,
     MatButtonModule,
     SharedUiChartModule,
-    StocksDataAccessPriceQueryModule
+    StocksDataAccessPriceQueryModule,
+    MatDatepickerModule,
+    MatNativeDateModule
   ],
   declarations: [StocksComponent]
 })

@@ -21,6 +21,22 @@
       </mat-option>
     </mat-select>
   </mat-form-field>
+
+  <mat-form-field color="accent">
+    <mat-label>From</mat-label>
+    <input (dateChange)="validateAndChangeDates(true)" formControlName="dateFrom" [max]=maxDateFrom matInput
+           [matDatepicker]="pickerFrom">
+    <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
+    <mat-datepicker #pickerFrom></mat-datepicker>
+  </mat-form-field>
+
+  <mat-form-field color="accent">
+    <mat-label>To</mat-label>
+    <input (dateChange)="validateAndChangeDates(false)" formControlName="dateTo" [max]=maxDateTo matInput
+           [matDatepicker]="pickerTo">
+    <mat-datepicker-toggle matSuffix [for]="pickerTo"></mat-datepicker-toggle>
+    <mat-datepicker #pickerTo color="primary"></mat-datepicker>
+  </mat-form-field>
 </form>
 
 <div class="alert" *ngIf="error$ | async; let error; else chart">

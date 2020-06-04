@@ -42,8 +42,12 @@ describe('StocksComponent', () => {
     const form = component.stockPickerForm;
     const symbolInput = form.controls['symbol'];
     const periodInput = form.controls['period'];
+    const dateFromInput = form.controls['dateFrom'];
+    const dateToInput = form.controls['dateTo'];
     symbolInput.setValue('AAPL');
     periodInput.setValue('6m');
+    dateFromInput.setValue('2019-10-02');
+    dateToInput.setValue('2019-10-03');
     expect(form.valid).toBeTruthy();
   });
 
