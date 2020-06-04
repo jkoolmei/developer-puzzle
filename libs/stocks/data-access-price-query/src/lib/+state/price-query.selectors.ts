@@ -14,6 +14,11 @@ export const getSelectedSymbol = createSelector(
   (state: PriceQueryState) => state.selectedSymbol
 );
 
+export const getError = createSelector(
+  getPriceQueryState,
+  (state: PriceQueryState) => state.error
+);
+
 const { selectAll } = priceQueryAdapter.getSelectors();
 
 export const getAllPriceQueries = createSelector(
