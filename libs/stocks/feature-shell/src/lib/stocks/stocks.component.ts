@@ -11,6 +11,7 @@ export class StocksComponent implements OnInit {
   stockPickerForm: FormGroup;
 
   quotes$ = this.priceQuery.priceQueries$;
+  selectedSymbol$ = this.priceQuery.selectedSymbol$;
 
   timePeriods = [
     { viewValue: 'All available data', value: 'max' },

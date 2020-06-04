@@ -6,3 +6,16 @@
   [columnNames]="chart.columnNames"
   [options]="chart.options">
 </google-chart>
+
+<table aria-live="polite" *ngIf="data" class="hidden">
+  <tbody>
+  <tr>
+    <th>Date</th>
+    <th>Close</th>
+  </tr>
+  <tr *ngFor="let item of data">
+    <td>{{item[0]}}</td>
+    <td>{{item[1]}}</td>
+  </tr>
+  </tbody>
+</table>

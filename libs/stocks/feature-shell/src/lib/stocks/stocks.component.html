@@ -26,4 +26,9 @@
   <button (click)="fetchQuote()" mat-raised-button>Go</button>
 </form>
 
+<h1 *ngIf="selectedSymbol$ | async as selectedSymbol">
+  <span>Chart for stock: </span>
+  <span>{{selectedSymbol}}</span>
+</h1>
+
 <coding-challenge-chart [data]="quotes$ | async"></coding-challenge-chart>
