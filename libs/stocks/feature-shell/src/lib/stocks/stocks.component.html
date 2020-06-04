@@ -41,16 +41,11 @@
 
 <div class="alert" *ngIf="error$ | async; let error; else chart">
   <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
-  {{error.error}}
+  {{error}}
 </div>
 
 <ng-template #chart>
   <div *ngIf="quotes$ | async as quotes">
-    <coding-challenge-chart *ngIf="quotes != ''" [data]="quotes"></coding-challenge-chart>
-    <div class="alert" *ngIf="stockPickerForm.valid && quotes == ''">
-      <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
-      Can't find any results.
-    </div>
+    <coding-challenge-chart *ngIf="quotes.length !== 0" [data]="quotes"></coding-challenge-chart>
   </div>
 </ng-template>
-

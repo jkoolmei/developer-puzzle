@@ -49,7 +49,7 @@ export function priceQueryReducer(
     case PriceQueryActionTypes.PriceQueryFetchError: {
       return {
         ...state,
-        error: action.error
+        error: action.error.error.message
       }
     }
   }
