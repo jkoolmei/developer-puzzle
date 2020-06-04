@@ -4,16 +4,10 @@
       matInput
       placeholder="Symbol e.g AAPL"
       formControlName="symbol"
-      value=""
-    />
-    <mat-error
-      ><span
-        *ngIf="
-          !stockPickerForm.get('symbol').valid &&
-          stockPickerForm.get('symbol').touched
-        "
-        >Please enter a symbol</span
-      >
+      value=""/>
+    <mat-error>
+      <span *ngIf="!stockPickerForm.get('symbol').valid &&
+                    stockPickerForm.get('symbol').touched">Please enter a symbol</span>
     </mat-error>
   </mat-form-field>
 
@@ -22,14 +16,25 @@
     <mat-select formControlName="period">
       <mat-option
         *ngFor="let timePeriod of timePeriods"
-        [value]="timePeriod.value"
-      >
+        [value]="timePeriod.value">
         {{ timePeriod.viewValue }}
       </mat-option>
     </mat-select>
   </mat-form-field>
-
-  <button (click)="fetchQuote()" mat-raised-button>Go</button>
 </form>
 
-<coding-challenge-chart [data$]="quotes$"></coding-challenge-chart>
+<div class="alert" *ngIf="error$ | async; let error; else chart">
+  <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+  {{error.error}}
+</div>
+
+<ng-template #chart>
+  <div *ngIf="quotes$ | async as quotes">
+    <coding-challenge-chart *ngIf="quotes != ''" [data]="quotes"></coding-challenge-chart>
+    <div class="alert" *ngIf="stockPickerForm.valid && quotes == ''">
+      <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+      Can't find any results.
+    </div>
+  </div>
+</ng-template>
+
